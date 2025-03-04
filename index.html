@@ -24,18 +24,37 @@
             margin: 10px;
             border-radius: 10px;
         }
+        .filters {
+            margin-top: 10px;
+        }
+        .filtered {
+            filter: grayscale(100%);
+        }
+        .watercolor {
+            filter: blur(2px) contrast(120%);
+        }
+        .neon {
+            filter: brightness(150%) saturate(200%);
+        }
     </style>
 </head>
 <body>
     <h1>Annabelle Prime</h1>
-    <p>Upload your beautiful drawings here!</p>
+    <p>Upload your beautiful drawings and apply cool effects!</p>
     <div class="upload-box">
         <input type="file" id="fileInput" accept="image/*">
         <button onclick="uploadImage()">Upload</button>
     </div>
+    <div class="filters">
+        <button onclick="applyFilter('original')">Original</button>
+        <button onclick="applyFilter('filtered')">Pencil Sketch</button>
+        <button onclick="applyFilter('watercolor')">Watercolor</button>
+        <button onclick="applyFilter('neon')">Neon Glow</button>
+    </div>
     <div class="gallery" id="gallery"></div>
 
     <script>
+        let currentImage = null;
         function uploadImage() {
             const input = document.getElementById('fileInput');
             const gallery = document.getElementById('gallery');
@@ -45,12 +64,21 @@
                 const reader = new FileReader();
                 
                 reader.onload = function(e) {
+                    gallery.innerHTML = ''; 
                     const img = document.createElement('img');
                     img.src = e.target.result;
+                    img.id = 'uploadedImage';
+                    currentImage = img;
                     gallery.appendChild(img);
                 }
                 
                 reader.readAsDataURL(file);
+            }
+        }
+        
+        function applyFilter(filter) {
+            if (currentImage) {
+                currentImage.className = filter;
             }
         }
     </script>
