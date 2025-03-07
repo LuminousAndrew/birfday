@@ -6,23 +6,42 @@
     <title>Drawing Fun!</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
             padding: 20px;
-            background-color: #f0f0f0;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            color: white;
+        }
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        p {
+            font-size: 1.2em;
         }
         canvas {
-            border: 2px solid black;
+            border: 5px solid white;
+            border-radius: 15px;
             margin-top: 20px;
             background-color: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         }
         #controls {
             margin-top: 20px;
         }
         button {
-            padding: 10px;
+            padding: 12px 18px;
             margin: 5px;
             font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #ff6b81;
+            color: white;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #ff4757;
         }
     </style>
 </head>
@@ -49,7 +68,6 @@
         let isDrawing = false;
         let currentColor = 'black';
 
-        // Mouse events
         canvas.addEventListener('mousedown', (e) => {
             isDrawing = true;
             draw(e);
@@ -66,25 +84,6 @@
             }
         });
 
-        // Touch events for mobile
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            isDrawing = true;
-            drawTouch(e);
-        });
-
-        canvas.addEventListener('touchend', () => {
-            isDrawing = false;
-            ctx.beginPath();
-        });
-
-        canvas.addEventListener('touchmove', (e) => {
-            if (isDrawing) {
-                drawTouch(e);
-            }
-        });
-
-        // Draw on the canvas using mouse
         function draw(e) {
             ctx.lineWidth = 5;
             ctx.lineCap = 'round';
@@ -96,47 +95,27 @@
             ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
         }
 
-        // Draw on the canvas using touch
-        function drawTouch(e) {
-            const touch = e.touches[0];
-            const touchX = touch.clientX - canvas.offsetLeft;
-            const touchY = touch.clientY - canvas.offsetTop;
-
-            ctx.lineWidth = 5;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = currentColor;
-
-            ctx.lineTo(touchX, touchY);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(touchX, touchY);
-        }
-
-        // Change drawing color
         function changeColor(color) {
             currentColor = color;
         }
 
-        // Clear the canvas
         function clearCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        // Apply a fun effect to the canvas
         function applyFunEffect() {
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imageData.data;
 
             for (let i = 0; i < data.length; i += 4) {
-                data[i] = Math.random() * 255;       // Red
-                data[i + 1] = Math.random() * 255;   // Green
-                data[i + 2] = Math.random() * 255;   // Blue
+                data[i] = Math.random() * 255;
+                data[i + 1] = Math.random() * 255;
+                data[i + 2] = Math.random() * 255;
             }
 
             ctx.putImageData(imageData, 0, 0);
         }
 
-        // Save the drawing to the device as a PNG file
         function saveDrawing() {
             const dataURL = canvas.toDataURL('image/png');
             const link = document.createElement('a');
